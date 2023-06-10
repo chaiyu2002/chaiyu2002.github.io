@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Java中如何创建自定义的注解学习笔记（MD版） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="概要Java中如何创建自定义的注解学习笔记（MD版）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中如何创建自定义的注解学习笔记（MD版）">
+<meta property="og:url" content="http://example.com/2019/11/16/java/java-annotation-note/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="概要Java中如何创建自定义的注解学习笔记（MD版）。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2019-11-16T06:53:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T11:57:01.840Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="注解">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-java/java-annotation-note" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/11/16/java/java-annotation-note/" class="article-date">
+  <time class="dt-published" datetime="2019-11-16T06:53:00.000Z" itemprop="datePublished">2019-11-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Java/">Java</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Java中如何创建自定义的注解学习笔记（MD版）
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><p>Java中如何创建自定义的注解学习笔记（MD版）。</p>
+<span id="more"></span>
+
+<h1 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h1><p>博客地址：<a target="_blank" rel="noopener" href="https://www.oxysun.cn/">IT老兵驿站</a>。</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记得这篇笔记还是在泉州的龙玲酒店记录的，是一个周六的晚上，坐飞机从上海到泉州，从笔记中能勾起一些旅游的回忆，感觉很丰富。</p>
+<p>这次重新修改它，是因为感觉对 Java 的注解还是没有搞明白，还需要再花点气力。</p>
+<p>这篇文章之前使用的是富文本编辑的，现在感觉迁移起来太痛苦，所以改为 Markdown 来记录。</p>
+<p>关于 Java 的注解，我一直在用，没有太搞明白它的原理，至于如何自定义一个注解，就更不明白了。其实参考的这篇文章，之前看过一遍，当时以为看懂了，但是最近在工作中去印证的时候，发现对注解还是不理解，所以这两天又再看了一遍，感觉这下又懂了一些。</p>
+<p>本文针对着原文的段落进行备注和记录笔记。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><blockquote>
+<h2 id="This-comprehensive-look-at-annotations-in-Java-not-only-goes-into-how-to-create-them-but-also-advise-on-how-to-use-them-and-how-they’re-processed-by-the-JVM"><a href="#This-comprehensive-look-at-annotations-in-Java-not-only-goes-into-how-to-create-them-but-also-advise-on-how-to-use-them-and-how-they’re-processed-by-the-JVM" class="headerlink" title="This comprehensive look at annotations in Java not only goes into how to create them but also advise on how to use them and how they’re processed by the JVM."></a>This comprehensive look at annotations in Java not only goes into how to create them but also advise on how to use them and how they’re processed by the JVM.</h2></blockquote>
+<p>这篇文章主旨不光是讲如何创建注解，还包括如何使用它们，以及它们在 JVM 上是如何处理的。</p>
+<blockquote>
+<p>Annotations are a powerful part of Java, but most times we tend to be the users rather than the creators of annotations. For example, it is not difficult to find Java source code that includes the <code>@Override</code> annotation processed by the Java compiler, the <code>@Autowired</code> annotation used by the <a target="_blank" rel="noopener" href="https://spring.io/">Spring framework</a>, or the <code>@Entity</code> annotation used by the <a target="_blank" rel="noopener" href="http://hibernate.org/">Hibernate framework</a>, but rarely do we see custom annotations. While custom annotations are an often-overlooked aspect of the Java language, they can be a very useful asset in developing readable code and just as importantly, useful in understanding how many common frameworks, such as Spring or Hibernate, succinctly accomplish their goals.</p>
+</blockquote>
+<p>自定义注解在实际的使用中，其实没有得到足够的重视。</p>
+<blockquote>
+<p>In this article, we will cover the basics of annotations, including what annotations are, how they are useful in large-than-academic examples, and how to process them. In order to demonstrate how annotations work in practice, we will create a Javascript Object Notation (JSON) serializer that processes annotated objects and produces a JSON string representing each object. Along the way, we will cover many of the common stumbling blocks of annotations, including the quirks of the Java reflection framework and visibility concerns for annotation consumers. The interested reader can find the source code for the completed JSON serializer on <a target="_blank" rel="noopener" href="https://github.com/albanoj2/dzone-json-serializer">GitHub</a>.</p>
+</blockquote>
+<p>这篇文章以一个 JSON 序列化器的注解为例来介绍。</p>
+<h2 id="What-Are-Annotations-注解是什么"><a href="#What-Are-Annotations-注解是什么" class="headerlink" title="What Are Annotations? 注解是什么"></a>What Are Annotations? 注解是什么</h2><blockquote>
+<p>Annotations are decorators that are applied to Java constructs, such as classes, methods, or fields, that associate metadata with the construct. These decorators are benign and do not execute any code in-and-of-themselves, but can be used by runtime frameworks or the compiler to perform certain actions. Stated more formally, the Java Language Specification (JLS), <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.7">Section 9.7</a>, provides the following definition:  <br /><br>An <em>annotation</em> is a marker which associates information with a program construct, but has no effect at run time. <br /><br>It is important to note the last clause in this definition: Annotations have no effect on a program at runtime. This is not to say that a framework may not change its behavior based on the presence of an annotation at runtime, but that the inclusion of an annotation does not itself change the runtime behavior of a program. While this may appear to be a nuanced distinction, it is a very important one that must be understood in order to grasp the usefulness of annotations. <br /><br>For example, adding the <code>@Autowired</code> annotation to an instance field does not in-and-of-itself change the runtime behavior of a program: The compiler simply includes the annotation at runtime, but the annotation does not execute any code or inject any logic that alters the normal behavior of the program (the behavior expected when the annotation is omitted). Once we introduce the Spring framework at runtime, we are able to gain powerful Dependency Injection (DI) functionality when our program is parsed. By including the annotation, we have instructed the Spring framework to inject an appropriate dependency into our field. We will see shortly (when we create our JSON serializer) that the annotation itself does not accomplish this, but rather, the annotation acts as a marker, informing the Spring framework that we desire a dependency to be injected into the annotated field.</p>
+</blockquote>
+<p>注解是一种装饰器，那么参考装饰器设计模式的概念，它其实是给被装饰者增加功能用的。</p>
+<h3 id="Retention-and-Target-保存和目标"><a href="#Retention-and-Target-保存和目标" class="headerlink" title="Retention and Target 保存和目标"></a>Retention and Target 保存和目标</h3><blockquote>
+<p>Creating an annotation requires two pieces of information: (1) a retention policy and (2) a target. A <strong>retention policy</strong> specifies how long, in terms of the program lifecycle, the annotation should be retained for. For example, annotations may be retained during compile-time or runtime, depending on the retention policy associated with the annotation. As of Java 9, there are <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/9/docs/api/java/lang/annotation/RetentionPolicy.html">three standard retention policies</a>, as summarized below:</p>
+</blockquote>
+<p>创建一个注解，需要两方面的信息：</p>
+<ol>
+<li>一个保留策略</li>
+<li>一个目标</li>
+</ol>
+<p>保留策略指定了多长时间，用术语来说就是程序的生命周期，这个注解可以被保留。参考下面：</p>
+<table>
+<thead>
+<tr>
+<th>POLICY</th>
+<th>DESCRIPTION</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Source</td>
+<td>Annotations are discarded by the compiler</td>
+</tr>
+<tr>
+<td>Class</td>
+<td>Annotations are recorded in the class file generated by the compiler but are not required to be retained by the Java Virtual Machine (JVM) that processes the class file at runtime</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>Annotations are recorded in the class file by the compiler and retained at runtime by the JVM</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>As we will see shortly, the runtime option for annotation retention is one of the most common, as it allows for Java programs to reflectively access the annotation and execute code based on the presence of an annotation, as well as access the data associated with an annotation. Note that an annotation has <em>exactly one</em> associated retention policy.</p>
+</blockquote>
+<blockquote>
+<p>The <strong>target</strong> of an annotation specifies which Java constructs an annotation can be applied to. For example, some annotations may be valid for methods only, while others may be valid for both classes and fields. As of Java 9, there are <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/9/docs/api/java/lang/annotation/ElementType.html">eleven standard annotation targets</a>, as summarized in the following table:</p>
+</blockquote>
+<p>注解的 target 指定了一个注解将会被用于哪一个 Java 构造器，下面表格进行了总结：</p>
+<table>
+<thead>
+<tr>
+<th>TARGET</th>
+<th>DESCRIPTION</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Annotation Type</td>
+<td>Annotates another annotation</td>
+</tr>
+<tr>
+<td>Constructor</td>
+<td>Annotates a constructor</td>
+</tr>
+<tr>
+<td>Field</td>
+<td>Annotates a field, such as an instance variable of a class or an <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html">enum constant</a></td>
+</tr>
+<tr>
+<td>Local variable</td>
+<td>Annotates a local variable</td>
+</tr>
+<tr>
+<td>Method</td>
+<td>Annotates a method of a class</td>
+</tr>
+<tr>
+<td>Module</td>
+<td>Annotates a module (new in Java 9)</td>
+</tr>
+<tr>
+<td>Package</td>
+<td>Annotates a package</td>
+</tr>
+<tr>
+<td>Parameter</td>
+<td>Annotates a parameter to a method or constructor</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>Annotates a type, such as a class, interfaces, annotation types, or enum declarations</td>
+</tr>
+<tr>
+<td>Type Parameter</td>
+<td>Annotates a type parameter, such as those used as formal generic parameters</td>
+</tr>
+<tr>
+<td>Type Use</td>
+<td>Annotates the use of a type, such as when an object of a type is created using the <code>new</code>keyword, when an object is cast to a specified type, when a class implements an interface, or when the type of a throwable object is declared using the throws keyword (for more information, see the [Type Annotations and Pluggable Type Systems Oracle tutorial]</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>For more information on these targets, see <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.7.4">Section 9.7.4 of the JLS</a>. It is important to note that <em>one or more</em> targets may be associated with an annotation. For example, if the field and constructor targets are associated with an annotation, then the annotation may be used on either fields or constructors. If on the other hand, an annotation only has an associated target of method, then applying the annotation to any construct other than a method results in an error during compilation.</p>
+</blockquote>
+<p>一个注解可以被关联上一个或者多个 target。</p>
+<h3 id="Annotation-Parameters-注解参数"><a href="#Annotation-Parameters-注解参数" class="headerlink" title="Annotation Parameters 注解参数"></a>Annotation Parameters 注解参数</h3><blockquote>
+<p>Annotations may also have associated parameters. These parameters may be a primitive (such as <code>int</code> or <code>double</code>), <code>String</code>, class, enum, annotation, or an array of any of the five preceding types (see <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.6.1">Section 9.6.1 of the JLS</a>). Associating parameters with an annotation allows for an annotation to provide contextual information or can parameterize a processor of an annotation. For example, in our JSON serializer implementation, we will allow for an optional annotation parameter that specifies the name of a field when it is serialized (or use the variable name of the field by default if no name is specified).</p>
+</blockquote>
+<p>注解可以有关联的参数，这些参数可以是一个原语（例如 <code>int</code> 或者 <code>double</code>），这里原语的意思是第一级的类型定义，<code>String</code>, class, enum, annotation，或者前面这五种类型的数据。把参数和一个注解关联起来，这样可以允许一个注解提供上下文的一些信息或者可以参数化一个注解的一个处理器。举个例子，在我们的 JSON 序列化器的实现中，我们将会允许一个作为可选项的注解参数来指定将要被序列化的字段的名字（或者，如果没有名称被指定，那么使用这个字段的默认名字）。</p>
+<h2 id="How-Are-Annotations-Created-注解是怎么创建的"><a href="#How-Are-Annotations-Created-注解是怎么创建的" class="headerlink" title="How Are Annotations Created? 注解是怎么创建的"></a>How Are Annotations Created? 注解是怎么创建的</h2><blockquote>
+<p>For our JSON serializer, we will create a field annotation that allows a developer to mark a field to be included when serializing an object. For example, if we create a car class, we can annotate the fields of the car (such as make and model) with our annotation. When we serialize a car object, the resulting JSON will include make and model keys, where the values represent the value of the make and model fields, respectively. For the sake of simplicity, we will assume that this annotation will be used only for fields of type <code>String</code>, ensuring that the value of the field can be directly serialized as a string.</p>
+</blockquote>
+<p>下面要开始举例说明如何创建一个注解。</p>
+<blockquote>
+<p>To create such a field annotation, we declare a new annotation using the <code>@interface</code> keyword:</p>
+</blockquote>
+<pre><code>@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface JsonField &#123;
+    public String value() default &quot;&quot;;
+&#125;
+</code></pre>
+<p>这个地方以前没有看仔细，这里是<code>@interface</code>，不是 <code>interface</code>。</p>
+<blockquote>
+<p>The core of our declaration is the <code>public @interface JsonField</code>, which declares an annotation type with a <code>public</code> modifier, allowing our annotation to be used in any package (assuming the package is properly imported if in another module). The body of the annotation declares a single <code>String</code> parameter, named <code>value</code>, that has a type of <code>String</code> and a default value of an empty string.</p>
+</blockquote>
+<p>上面这段代码声明的核心是 <code>public @interface JsonField</code>，这声明了一个带有 <code>public</code> 修饰符的注解，允许我们的注解在任意的包被使用（假设这个包在任何模块中正确地被引入—-这句话有点看不懂）。声明的 body 部分声明了一个 String 的参数，名字是 value ，类型是 String，默认值是空的 String。</p>
+<blockquote>
+<p>Note that the variable name <code>value</code> has a special meaning: It defines a Single-Element Annotation (<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jls/se9/html/jls-9.html#jls-9.7.3">Section 9.7.3. of the JLS</a>) and allows users of our annotation to supply a single parameter to the annotation without specifying the name of the parameter. For example, a user can annotate a field using <code>@JsonField(&quot;someFieldName&quot;)</code> and is not <em>required</em> to declare the annotation as <code>@JsonField(value = &quot;someFieldName&quot;)</code>, although the latter may still be used (but it is not required). The inclusion of a default value of empty string allows for the value to be omitted, resulting in <code>value</code> holding an empty string if no value is explicitly specified. For example, if a user declares the above annotation using the form <code>@JsonField</code>, then the <code>value</code> parameter is set to an empty string.</p>
+</blockquote>
+<p>注意这个 value 有一个特殊的意义，它定义了一个单元素的注解，允许注解的使用者给一个注解提供一个单一的参数，而不用指定参数的名字。例如用户可以<code>@JsonField(&quot;someFieldName&quot;)</code> 这样去对一个字段进行注解，而不需要<code>@JsonField(value = &quot;someFieldName&quot;)</code> 这样去声明这个注解，当然后面这种方式还是可以被使用的。默认值的包含允许这个 value 值被忽略，而没有明确的 value 被指定的时候，就会使用这个空字符串作为默认值，例如，一个用户是用<code>@JsonField</code> 来声明的，那么这个 <code>value</code> 就会被设置成空串。</p>
+<blockquote>
+<p>The retention policy and target of the annotation declaration are specified using the <code>@Retention</code> and <code>@Target</code>annotations, respectively. The retention policy is specified using the <code>[java.lang.annotation.RetentionPolicy](https://docs.oracle.com/javase/9/docs/api/java/lang/annotation/RetentionPolicy.html)</code>enum and includes constants for each of the three standard retention policies. Likewise, the target is specified using the <code>[java.lang.annotation.ElementType](https://docs.oracle.com/javase/9/docs/api/java/lang/annotation/ElementType.html)</code>enum, which includes constants for each of the eleven standard target types.</p>
+</blockquote>
+<blockquote>
+<p>In summary, we created a public, single-element annotation named <code>JsonField</code>, which is retained by the JVM during runtime and may only be applied to fields. This annotation has a single parameter, <code>value</code>, of type <code>String</code> with a default value of an empty string. With our annotation created, we can now annotate fields to be serialized.</p>
+</blockquote>
+<h2 id="How-Are-Annotations-Used-注解是怎么被使用的"><a href="#How-Are-Annotations-Used-注解是怎么被使用的" class="headerlink" title="How Are Annotations Used? 注解是怎么被使用的"></a>How Are Annotations Used? 注解是怎么被使用的</h2><blockquote>
+<p>Using an annotation requires only that the annotation is placed before an appropriate construct (any valid target for the annotation). For example, we can create a <code>Car</code>class using the following class declaration:</p>
+</blockquote>
+<p>下面结合一个例子来讲，注解是如何被使用的。</p>
+<pre><code>public class Car &#123;
+
+    @JsonField(&quot;manufacturer&quot;)
+    private final String make;
+
+    @JsonField
+    private final String model;
+
+    private final String year;
+
+    public Car(String make, String model, String year) &#123;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+    &#125;
+
+    public String getMake() &#123;
+        return make;
+    &#125;
+
+    public String getModel() &#123;
+        return model;
+    &#125;
+
+    public String getYear() &#123;
+        return year;
+    &#125;
+
+    @Override
+    public String toString() &#123;
+        return year + &quot; &quot; + make + &quot; &quot; + model;
+    &#125;
+&#125;
+</code></pre>
+<blockquote>
+<p>This class exercises the two major uses of the <code>@JsonField</code> annotation: (1) with an explicit value and (2) with a default value. We could have also annotated a field using the form <code>@JsonField(value = &quot;someName&quot;)</code>, but this style is overly verbose and does not aid in the readability of our code. Therefore, unless the inclusion of an annotation parameter name <em>in a single-element annotation</em> adds to the readability of code, it should be omitted. For annotations with more than one parameter, the name of each parameter is required to differentiate between parameters (unless only one argument is provided, in which case, the argument is mapped to the <code>value</code> parameter if no name is explicitly provided).</p>
+</blockquote>
+<p>上面的例子实践了注解的两个用法，一个是带有明确的值，一个是带有一个默认值。对于单一参数的注解，可以忽略掉参数名；反之，则不行。</p>
+<blockquote>
+<p>Given the above uses of the <code>@JsonField</code> annotation, we would expect that a <code>Car</code> ject is serialized into a JSON string of the form <code>&#123;&quot;manufacturer&quot;:&quot;someMake&quot;, &quot;model&quot;:&quot;someModel&quot;&#125;</code> (note, as we will see later, we will disregard the order of the keys–<code>manufacturer</code> and <code>model</code>–in this JSON string). Before we proceed, it is important to note that adding the <code>@JsonField</code> annotations does not change the runtime behavior of the <code>Car</code>class. If we compile this class, the inclusion of <code>@JsonField</code> annotations does not enhance the behavior of the <code>Car</code> class anymore than had we omitted the annotations. These annotations are simply recorded, along with the value of the <code>value</code> parameter, in the class file for the <code>Car</code> class. Altering the runtime behavior of our system requires that we process these annotations.</p>
+</blockquote>
+<p>基于上面的 <code>@JsonField</code> 的注解使用，我们可以期望一个 <code>Car</code> 被序列化成一个 JSON 字符串。<br>后面这段是讲，这个注解并没有改变 <code>Car</code> 的运行时的行为。</p>
+<h2 id="How-are-Annotations-Processed-注解是怎么被处理的"><a href="#How-are-Annotations-Processed-注解是怎么被处理的" class="headerlink" title="How are Annotations Processed? 注解是怎么被处理的"></a>How are Annotations Processed? 注解是怎么被处理的</h2><blockquote>
+<p>Processing annotations is accomplished through the <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/reflect/">Java Reflection Application Programming Interface (API)</a>. Sidelining the technical nature of the reflection API for a moment, the reflection API allows us to write code that will inspect the class, methods, fields, etc. of an object. For example, if we create a method that accepts a <code>Car</code> object, we can inspect the class of this object (namely, <code>Car</code>) and discover that this class has three fields: (1) <code>make</code>, (2) <code>model</code>, and (3) <code>year</code>. Furthermore, we can inspect these fields to discover if each is annotated with a specific annotation.</p>
+</blockquote>
+<p>注解的处理是由反射的 API 来完成的，反射的 API 允许我们写一些代码去检视一个对象的类、方法、域等。</p>
+<blockquote>
+<p>Using this capability, we can iterate through each field of the class associated with the object passed to our method and discover which of these fields are annotated with the <code>@JsonField</code> annotation. If the field is annotated with the <code>@JsonField</code> annotation, we record the name of the field and its value. Once all the fields have been processed, then we can create the JSON string using these field names and values.</p>
+</blockquote>
+<p>使用这个能力，我们可以遍历传递给我们的方法的对象的类的每一个字段，并且去发现那些字段是被 <code>@JsonField</code> 来注解的。前半句有些拗口，“传递给我们的方法的对象”，这里是指什么呢？如果一个域被用 <code>@JsonField</code> 注解，我们记录下来它的域的名称和它的值。</p>
+<blockquote>
+<p>Determining the name of the field requires more complex logic than determining the value. If the <code>@JsonField</code>includes a provided value for the value parameter (such as <code>&quot;manufacturer&quot;</code> in the previous <code>@JsonField(&quot;manufacturer&quot;)</code> use), we will use this provided field name. If the value of the value parameter is an empty string, we know that no field name was explicitly provided (since this is the default value for the value parameter), or else, an empty string was explicitly provided. In either case, we will use the variable name of the field as the field name (for example, <code>model</code> in the <code>private final String model</code> declaration).</p>
+</blockquote>
+<p>确定域的名字比确定值，逻辑要更加复杂。如果 <code>@JsonField</code> 包含一个给 value 参数提供一个值（例如之前的 <code>@JsonField(&quot;manufacturer&quot;)</code>  里面的<code>&quot;manufacturer&quot;</code> ），我们将那个作为域的值。如果 value 参数的值是一个空串，那么我们知道域的名称没有被明确地提供（因为这是 value 参数的默认值），或者提供了一个空串。这种情况下，我们将使用这个域的变量名作为域的名（例如，在  <code>private final String model</code> 声明里面的 <code>model</code>）。</p>
+<p>这个注解其实是为了确认这个域的名称，这里的 value 是这个域的名称的 value，不是这个域的值，这里容易混淆，之前就没搞明白这里。</p>
+<blockquote>
+<p>Combining this logic into a <code>JsonSerializer</code> class, we can create the following class declaration:</p>
+</blockquote>
+<pre><code>public class JsonSerializer &#123;
+
+    public String serialize(Object object) throws JsonSerializeException &#123;
+
+        try &#123;
+            Class&lt;?&gt; objectClass = requireNonNull(object).getClass();
+            Map&lt;String, String&gt; jsonElements = new HashMap&lt;&gt;();
+
+            for (Field field: objectClass.getDeclaredFields()) &#123;
+                field.setAccessible(true);
+                if (field.isAnnotationPresent(JsonField.class)) &#123;
+                    jsonElements.put(getSerializedKey(field), (String) field.get(object));
+                &#125;
+            &#125;
+            System.out.println(toJsonString(jsonElements));
+            return toJsonString(jsonElements);
+        &#125;
+        catch (IllegalAccessException e) &#123;
+            throw new JsonSerializeException(e.getMessage());
+        &#125;
+    &#125;
+
+    private String toJsonString(Map&lt;String, String&gt; jsonMap) &#123;
+        String elementsString = jsonMap.entrySet()
+                .stream()
+                .map(entry -&gt; &quot;\&quot;&quot;  + entry.getKey() + &quot;\&quot;:\&quot;&quot; + entry.getValue() + &quot;\&quot;&quot;)
+                .collect(Collectors.joining(&quot;,&quot;));
+        return &quot;&#123;&quot; + elementsString + &quot;&#125;&quot;;
+    &#125;
+
+    private static String getSerializedKey(Field field) &#123;
+        String annotationValue = field.getAnnotation(JsonField.class).value();
+
+        if (annotationValue.isEmpty()) &#123;
+            return field.getName();
+        &#125;
+        else &#123;
+            return annotationValue;
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<blockquote>
+<p>Note that multiple responsibilities have been combined into this class for the sake of brevity. For a refactored version of this serializer class, see <a target="_blank" rel="noopener" href="https://github.com/albanoj2/dzone-json-serializer/tree/srp_generalization">this branch</a> in the codebase repository. We also create an exception that will be used to denote if an error has occurred while processing the object supplied to our serialize method:</p>
+</blockquote>
+<pre><code>public class JsonSerializeException extends Exception &#123;
+
+    private static final long serialVersionUID = -8845242379503538623L;
+
+    public JsonSerializeException(String message) &#123;
+        super(message);
+    &#125;
+&#125;
+</code></pre>
+<blockquote>
+<p>Although the <code>JsonSerializer</code> class appears complex, it consists of three main tasks: (1) finding all fields of the supplied class annotated with the <code>@JsonField</code> annotation, (2) recording the field name (or the explicitly provided field name) and value for all fields that include the <code>@JsonField</code> annotation, and (3) converting the recorded field name and value pairs into a JSON string.</p>
+</blockquote>
+<p>上面这个 <code>JsonSerializer</code> 类有一些复杂，它包含了3个主要任务：</p>
+<p><code>1\. 发现所有被@JsonField注解的域。</code></p>
+<p><code>2\. 记录所有包含在@JsonField注解的域的名字，或者明确提供域的名字和所有域的值。</code></p>
+<p><code>3\. 转换这些域的名和值到一个JSON字符串。</code></p>
+<blockquote>
+<p>The line <code>requireNonNull(object).getClass()</code> simply checks that the supplied object is not <code>null</code> (and throws a <code>NullPointerException</code> if it is) and obtains the <code>[Class](https://docs.oracle.com/javase/9/docs/api/java/lang/Class.html)</code> object associated with the supplied object. We will use this <code>Class</code> object shortly to obtain the fields associated with the class. Next, we create a <code>Map</code> of <code>String</code>s to <code>String</code>s, which will be used store the field name and value pairs.</p>
+</blockquote>
+<p>这个代码里面涉及到了一些新的 Java 的功能，我以前没有接触过，例如  <code>requireNonNull(object).getClass()</code> 可以检查一个对象是否是 <code>null</code>， 如果不是，则去获取这个对象的 <code>[Class]</code> 信息。</p>
+<blockquote>
+<p>With our data structures established, we next iterate through each field declared in the class of the supplied object. For each field, we configure the field to suppress Java language access checking when accessing the field. This is a very important step since the fields we annotated are private. In the standard case, we would be unable to access these fields, and attempting to obtain the value of the private field would result in an <code>IllegalAccessException</code> being thrown. In order to access these private fields, we must instruct the reflection API to suppress the standard Java access checking for this field using the <code>setAccessible</code> method. The <code>setAccessible(boolean)</code> documentation defines the meaning of the supplied boolean flag as follows:</p>
+</blockquote>
+<p>这里涉及到了一个比较关键的地方，即权限问题，本来 Java 的这些私有域都是不能被访问的，为了访问这些私有域，我们必须通知反射的 API 去抑制住标准的 Java 访问检查，即使用 <code>setAccessible</code> 这个方法。</p>
+<blockquote>
+<p>A value of <code>true</code> indicates that the reflected object should suppress Java language access checking when it is used. A value of <code>false</code> indicates that the reflected object should enforce Java language access checks.</p>
+</blockquote>
+<blockquote>
+<p>Note that with the introduction of modules in Java 9, using the <code>setAccessible</code> method requires that the package containing the class whose private fields will be accessed should be declared open in its module definition. For more information, see <a target="_blank" rel="noopener" href="https://stackoverflow.com/a/46482376/2403253">this explanation by Michał Szewczyk</a> and <a target="_blank" rel="noopener" href="http://in.relation.to/2017/04/11/accessing-private-state-of-java-9-modules/">Accessing Private State of Java 9 Modules by Gunnar Morling</a>.</p>
+</blockquote>
+<p>这里会有一个访问权限的问题，因为注解关联的域是私有域，那么想要访问，需要修改反射时的访问权限。</p>
+<blockquote>
+<p>After gaining access to the field, we check if the field is annotated with the <code>@JsonField</code>. If it is, we determine the name of the field (either through an explicit name provided in the <code>@JsonField</code> annotation or the default name, which equals the variable name of the field) and record the name and field value in our previously constructed map. Once all fields have been processed, we then convert the map of field names to field values (<code>jsonElements</code>) into a JSON string.</p>
+</blockquote>
+<blockquote>
+<p>We accomplish by converting the map into a stream of entries (key-value pairs for each entry in the map), mapping each entry to a string of the form <code>&quot;&lt;fieldName&gt;&quot;:&quot;&lt;fieldValue&gt;&quot;</code>, where <code>&lt;fieldName&gt;</code> is the key for the entry and <code>&lt;fieldValue&gt;</code> is the value for the entry. Once all entries have been processed, we combine all of these entry strings with a comma. This results in a string of the form <code>&quot;&lt;fieldName1&gt;&quot;:&quot;&lt;fieldValue1&gt;&quot;,&quot;&lt;fieldName2&gt;&quot;:&quot;&lt;fieldValue2&gt;&quot;,...</code>. Once this terminal string has been joined, we surround it with curly braces, creating a valid JSON string.</p>
+</blockquote>
+<blockquote>
+<p>In order to test this serializer, we can execute the following code:</p>
+</blockquote>
+<pre><code>Car car = new Car(&quot;Ford&quot;, &quot;F150&quot;, &quot;2018&quot;);
+JsonSerializer serializer = new JsonSerializer();
+serializer.serialize(car);
+</code></pre>
+<blockquote>
+<p>This results in the following output:</p>
+</blockquote>
+<pre><code>&#123;&quot;model&quot;:&quot;F150&quot;,&quot;manufacturer&quot;:&quot;Ford&quot;&#125;
+</code></pre>
+<blockquote>
+<p>As expected, the <code>maker</code> and <code>model</code> fields of the <code>Car</code> object have been serialized, using the name of the field (or the explicitly supplied name in the case of the <code>maker</code> field) as the key and the value of the field as the value. Note that the order of JSON elements may be reversed from the output seen above. This occurs because there is no definite ordering for the array of declared fields for a class, as stated in the <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/9/docs/api/java/lang/Class.html#getDeclaredFields--"><code>getDeclaredFields</code>documentation</a>:</p>
+</blockquote>
+<blockquote>
+<p>The elements in the returned array are not sorted and are not in any particular order.</p>
+</blockquote>
+<blockquote>
+<p>Due to this limitation, the order of the elements in the JSON string may vary. To make the order of the elements deterministic, we would have to impose ordering ourselves (such as by sorting the map of field names to field values). Since a JSON object is defined as an <em>unordered</em> set of name-value pairs, as per the <a target="_blank" rel="noopener" href="http://json.org/">JSON standard</a>, imposing ordering is unneeded. Note, however, a test case for the serialize method should pass for either <code>&#123;&quot;model&quot;:&quot;F150&quot;,&quot;manufacturer&quot;:&quot;Ford&quot;&#125;</code> or <code>&#123;&quot;manufacturer&quot;:&quot;Ford&quot;,&quot;model&quot;:&quot;F150&quot;&#125;</code>.</p>
+</blockquote>
+<p>上面输出的 JSON 并没有排序，这并没有什么问题，规则中并没有要求有顺序。</p>
+<h2 id="Conclusion-结论"><a href="#Conclusion-结论" class="headerlink" title="Conclusion 结论"></a>Conclusion 结论</h2><blockquote>
+<p>Java annotations are a very powerful feature in the Java language, but most often, we are the users of standard annotations (such as <code>@Override</code>) or common framework annotations (such as <code>@Autowired</code>), rather than their developers. While annotations should not be used in place of interfaces or other language constructs that properly accomplish a task in an object-oriented manner, they can greatly simplify repetitive logic. For example, rather than creating a <code>toJsonString</code>method within an interface and having all classes that can be serialized implement this interface, we can annotate each serializable field. This takes the repetitive logic of the serialization process (mapping field names to fields values) and places it into a single serializer class. It also decouples the serialization logic from the domain logic, removing the clutter of manual serialization from the conciseness of the domain logic.</p>
+<p>While custom annotations are not frequently used in most Java applications, knowledge of this feature is a requirement for any intermediate or advanced user of the Java language. Not only will knowledge of this feature enhance the toolbox of a developer, which is just as important, but it will also aid in the understanding of the common annotations in the most popular Java frameworks.</p>
+</blockquote>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文以一个实际的例子，描述了怎么去写一个 Java 的注解，反复理解这个过程，对于理解注解，有很好的帮助。</p>
+<p>其实通过一些特定的类，可以反向获取到很多 Java 对象类的信息，例如域，例如注解，这样来给原本的对象类增加了一些功能。</p>
+<p>这里面涉及到的类、方法、用法：<br><code>Class</code> 这个类可以获取对象类的基本信息，从 JDK 1.0 就开始存在了，以前研究反射应该是用过，但是没有仔细琢磨过这个类。<br><code>requireNonNull</code> 这个是 Objects 的一个静态方法，1.7 之后引入的，这个类可以理解为一个工具类，它的注释里面也写着 utilities。<br>Field 用来动态访问类或者接口的类<br>@Test JUnit 的注解<br>NullPointerException<br>静态 import 参考底下的链接，1.5 版本引入的，不再需要类名，直接可以使用静态方法，不过不推荐使用</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://dzone.com/articles/creating-custom-annotations-in-java">https://dzone.com/articles/creating-custom-annotations-in-java</a><br><a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/static-import-java/">https://www.geeksforgeeks.org/static-import-java/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/11/16/java/java-annotation-note/" data-id="cliph6pd900652cx820bw5xhe" data-title="Java中如何创建自定义的注解学习笔记（MD版）" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/11/23/linux/vim-copy-note/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          vim 的移动
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/11/08/data-structure/Binary-tree-note/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">二叉树学习笔记（未完待续）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/">Blockchain</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/%E4%BB%A5%E5%A4%AA%E5%9D%8A/">以太坊</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/%E4%BB%A5%E5%A4%AA%E5%9D%8A/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/">智能合约</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/CSS/">CSS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Design-Pattern/">Design Pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ES/">ES</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/NPM/">NPM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/Vue/">Vue</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kafka/">Kafka</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Shell/">Shell</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Ubuntu/">Ubuntu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/MongoDB/">MongoDB</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SOA/">SOA</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%AE%B0/">杂记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/">程序人生</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E5%88%92/">计划</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Autowired/" rel="tag">Autowired</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/B-%E6%A0%91/" rel="tag">B 树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/B-%E6%A0%91/" rel="tag">B+ 树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Base48/" rel="tag">Base48</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Beans/" rel="tag">Beans</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDL/" rel="tag">DDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DETACHED-HEAD/" rel="tag">DETACHED HEAD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DTO/" rel="tag">DTO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/English/" rel="tag">English</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git-Flow/" rel="tag">Git Flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KVC/" rel="tag">KVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NAT/" rel="tag">NAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/" rel="tag">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OC/" rel="tag">OC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/POJO/" rel="tag">POJO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ReactiveCocoa/" rel="tag">ReactiveCocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ReactiveObjC/" rel="tag">ReactiveObjC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Repository-not-found/" rel="tag">Repository not found</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RequestBody/" rel="tag">RequestBody</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ResponseBody/" rel="tag">ResponseBody</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RestControlle/" rel="tag">RestControlle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SASS/" rel="tag">SASS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shiro/" rel="tag">Shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SprintMVC/" rel="tag">SprintMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Style/" rel="tag">Style</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu16-04/" rel="tag">Ubuntu16.04</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VO/" rel="tag">VO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/" rel="tag">Workflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/X-Frame-Options/" rel="tag">X-Frame-Options</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/M/" rel="tag">^M</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/aggregate/" rel="tag">aggregate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alter/" rel="tag">alter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/args/" rel="tag">args</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/buffer/" rel="tag">buffer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cache/" rel="tag">cache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/change/" rel="tag">change</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/checkout/" rel="tag">checkout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmake/" rel="tag">cmake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collection/" rel="tag">collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/component/" rel="tag">component</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computed/" rel="tag">computed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/create/" rel="tag">create</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/df/" rel="tag">df</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/diff/" rel="tag">diff</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/double-ampersand/" rel="tag">double ampersand</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/double-vertical-bar/" rel="tag">double vertical bar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/driver/" rel="tag">driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/du/" rel="tag">du</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fast-forward/" rel="tag">fast forward</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ff/" rel="tag">ff</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/font-size/" rel="tag">font-size</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-branch/" rel="tag">git branch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-index/" rel="tag">git index</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-merge/" rel="tag">git merge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-pull/" rel="tag">git pull</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-reflog/" rel="tag">git reflog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-reset/" rel="tag">git reset</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-rev-parse/" rel="tag">git rev-parse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-revert/" rel="tag">git revert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-tag/" rel="tag">git tag</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i-e/" rel="tag">i.e.</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/inode/" rel="tag">inode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jps/" rel="tag">jps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kwargs/" rel="tag">kwargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/make/" rel="tag">make</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mapper-locations/" rel="tag">mapper-locations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/maven/" rel="tag">maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/modify/" rel="tag">modify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/module/" rel="tag">module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nexus/" rel="tag">nexus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/no-ff/" rel="tag">no-ff</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/package/" rel="tag">package</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom/" rel="tag">pom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rewrite/" rel="tag">rewrite</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rm/" rel="tag">rm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/schema/" rel="tag">schema</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/semicolon/" rel="tag">semicolon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/soa/" rel="tag">soa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/synchronized/" rel="tag">synchronized</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/this/" rel="tag">this</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/" rel="tag">tomcat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/true-merge/" rel="tag">true merge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/url/" rel="tag">url</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%80%E6%A3%B5%E5%BC%80%E8%8A%B1%E7%9A%84%E6%A0%91/" rel="tag">一棵开花的树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%BB%E9%A2%98/" rel="tag">主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag">以太坊</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BE%9D%E8%B5%96%E5%8C%85/" rel="tag">依赖包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%AE%E6%94%B9/" rel="tag">修改</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%80%BC%E4%BC%A0%E9%80%92/" rel="tag">值传递</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%B2%E7%AA%81/" rel="tag">冲突</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E6%94%AF/" rel="tag">分支</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%9B%E5%BB%BA/" rel="tag">创建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">创建数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%87%E7%BA%A7/" rel="tag">升级</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0/" rel="tag">参数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A7%94%E6%89%98/" rel="tag">委托</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8/" rel="tag">存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%9C%A8/" rel="tag">存在</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BE%8B/" rel="tag">实例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8/" rel="tag">容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/" rel="tag">工作流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B8%AD%E6%85%95%E8%93%89/" rel="tag">席慕蓉</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" rel="tag">异步编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1/" rel="tag">微信</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E5%85%A5/" rel="tag">插入</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" rel="tag">数据存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/" rel="tag">数据集合</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E6%A1%A3/" rel="tag">文档</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E6%A1%A3%E6%B5%81/" rel="tag">文档流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" rel="tag">智能合约</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%87%E7%AD%BE/" rel="tag">标签</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95/" rel="tag">模板语法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag">比特币</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%B5%AA%E5%AD%97%E7%AC%A6/" rel="tag">波浪字符</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%B3%95/" rel="tag">用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/" rel="tag">端口占用</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%A6%E5%8F%B7/" rel="tag">符号</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" rel="tag">红黑树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/" rel="tag">组件基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%91%E5%AE%9A/" rel="tag">绑定</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F/" rel="tag">职责链模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E5%90%88/" rel="tag">聚合</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E9%9B%86%E7%B4%A2%E5%BC%95/" rel="tag">聚集索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/" rel="tag">自定义指令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7/" rel="tag">计算属性</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag">进程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80/" rel="tag">远程仓库地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E6%93%8D%E4%BD%9C%E7%AC%A6/" rel="tag">逻辑操作符</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%BE%E5%BA%A6/" rel="tag">难度</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Autowired/" style="font-size: 10px;">Autowired</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B 树</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+ 树</a> <a href="/tags/Base48/" style="font-size: 10px;">Base48</a> <a href="/tags/Beans/" style="font-size: 10px;">Beans</a> <a href="/tags/CSS/" style="font-size: 12.73px;">CSS</a> <a href="/tags/DDL/" style="font-size: 10px;">DDL</a> <a href="/tags/DETACHED-HEAD/" style="font-size: 10px;">DETACHED HEAD</a> <a href="/tags/DTO/" style="font-size: 10px;">DTO</a> <a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/English/" style="font-size: 10px;">English</a> <a href="/tags/Git/" style="font-size: 20px;">Git</a> <a href="/tags/Git-Flow/" style="font-size: 10px;">Git Flow</a> <a href="/tags/JS/" style="font-size: 16.36px;">JS</a> <a href="/tags/Java/" style="font-size: 19.09px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/KVC/" style="font-size: 10.91px;">KVC</a> <a href="/tags/Kafka/" style="font-size: 10.91px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 18.18px;">Linux</a> <a href="/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 17.27px;">MongoDB</a> <a href="/tags/MySQL/" style="font-size: 11.82px;">MySQL</a> <a href="/tags/NAT/" style="font-size: 10px;">NAT</a> <a href="/tags/NPM/" style="font-size: 10px;">NPM</a> <a href="/tags/OC/" style="font-size: 10.91px;">OC</a> <a href="/tags/POJO/" style="font-size: 10.91px;">POJO</a> <a href="/tags/Python/" style="font-size: 13.64px;">Python</a> <a href="/tags/ReactiveCocoa/" style="font-size: 10.91px;">ReactiveCocoa</a> <a href="/tags/ReactiveObjC/" style="font-size: 10.91px;">ReactiveObjC</a> <a href="/tags/Repository-not-found/" style="font-size: 10px;">Repository not found</a> <a href="/tags/RequestBody/" style="font-size: 10px;">RequestBody</a> <a href="/tags/ResponseBody/" style="font-size: 10px;">ResponseBody</a> <a href="/tags/RestControlle/" style="font-size: 10px;">RestControlle</a> <a href="/tags/SASS/" style="font-size: 10px;">SASS</a> <a href="/tags/Shiro/" style="font-size: 10.91px;">Shiro</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/SprintMVC/" style="font-size: 10px;">SprintMVC</a> <a href="/tags/Style/" style="font-size: 10px;">Style</a> <a href="/tags/Ubuntu16-04/" style="font-size: 10px;">Ubuntu16.04</a> <a href="/tags/VO/" style="font-size: 10px;">VO</a> <a href="/tags/Vue/" style="font-size: 15.45px;">Vue</a> <a href="/tags/Workflow/" style="font-size: 10px;">Workflow</a> <a href="/tags/X-Frame-Options/" style="font-size: 10px;">X-Frame-Options</a> <a href="/tags/M/" style="font-size: 10px;">^M</a> <a href="/tags/aggregate/" style="font-size: 10.91px;">aggregate</a> <a href="/tags/alter/" style="font-size: 10px;">alter</a> <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/args/" style="font-size: 10px;">args</a> <a href="/tags/buffer/" style="font-size: 10px;">buffer</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/change/" style="font-size: 10px;">change</a> <a href="/tags/checkout/" style="font-size: 10.91px;">checkout</a> <a href="/tags/cmake/" style="font-size: 10px;">cmake</a> <a href="/tags/collection/" style="font-size: 10px;">collection</a> <a href="/tags/component/" style="font-size: 10px;">component</a> <a href="/tags/computed/" style="font-size: 10px;">computed</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/df/" style="font-size: 10px;">df</a> <a href="/tags/diff/" style="font-size: 10px;">diff</a> <a href="/tags/double-ampersand/" style="font-size: 10px;">double ampersand</a> <a href="/tags/double-vertical-bar/" style="font-size: 10px;">double vertical bar</a> <a href="/tags/driver/" style="font-size: 10px;">driver</a> <a href="/tags/du/" style="font-size: 10px;">du</a> <a href="/tags/fast-forward/" style="font-size: 10px;">fast forward</a> <a href="/tags/ff/" style="font-size: 10px;">ff</a> <a href="/tags/font/" style="font-size: 10px;">font</a> <a href="/tags/font-size/" style="font-size: 10px;">font-size</a> <a href="/tags/free/" style="font-size: 10px;">free</a> <a href="/tags/git-branch/" style="font-size: 10px;">git branch</a> <a href="/tags/git-index/" style="font-size: 10px;">git index</a> <a href="/tags/git-merge/" style="font-size: 13.64px;">git merge</a> <a href="/tags/git-pull/" style="font-size: 10px;">git pull</a> <a href="/tags/git-reflog/" style="font-size: 10px;">git reflog</a> <a href="/tags/git-reset/" style="font-size: 10px;">git reset</a> <a href="/tags/git-rev-parse/" style="font-size: 10px;">git rev-parse</a> <a href="/tags/git-revert/" style="font-size: 10px;">git revert</a> <a href="/tags/git-tag/" style="font-size: 10px;">git tag</a> <a href="/tags/i-e/" style="font-size: 10px;">i.e.</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/inode/" style="font-size: 10px;">inode</a> <a href="/tags/jps/" style="font-size: 10px;">jps</a> <a href="/tags/kwargs/" style="font-size: 10px;">kwargs</a> <a href="/tags/linux/" style="font-size: 11.82px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/mapper-locations/" style="font-size: 10px;">mapper-locations</a> <a href="/tags/maven/" style="font-size: 10.91px;">maven</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/modify/" style="font-size: 10px;">modify</a> <a href="/tags/module/" style="font-size: 10.91px;">module</a> <a href="/tags/nexus/" style="font-size: 10px;">nexus</a> <a href="/tags/no-ff/" style="font-size: 10px;">no-ff</a> <a href="/tags/package/" style="font-size: 10.91px;">package</a> <a href="/tags/pom/" style="font-size: 10px;">pom</a> <a href="/tags/rewrite/" style="font-size: 10px;">rewrite</a> <a href="/tags/rm/" style="font-size: 10px;">rm</a> <a href="/tags/schema/" style="font-size: 10px;">schema</a> <a href="/tags/semicolon/" style="font-size: 10px;">semicolon</a> <a href="/tags/shell/" style="font-size: 10.91px;">shell</a> <a href="/tags/soa/" style="font-size: 10px;">soa</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/this/" style="font-size: 10px;">this</a> <a href="/tags/tomcat/" style="font-size: 10.91px;">tomcat</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/true-merge/" style="font-size: 10px;">true merge</a> <a href="/tags/url/" style="font-size: 10px;">url</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E4%B8%80%E6%A3%B5%E5%BC%80%E8%8A%B1%E7%9A%84%E6%A0%91/" style="font-size: 10px;">一棵开花的树</a> <a href="/tags/%E4%B8%BB%E9%A2%98/" style="font-size: 10px;">主题</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 10.91px;">介绍</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 10px;">代理</a> <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" style="font-size: 11.82px;">以太坊</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%8C%85/" style="font-size: 10.91px;">依赖包</a> <a href="/tags/%E4%BF%AE%E6%94%B9/" style="font-size: 10px;">修改</a> <a href="/tags/%E5%80%BC%E4%BC%A0%E9%80%92/" style="font-size: 10px;">值传递</a> <a href="/tags/%E5%86%B2%E7%AA%81/" style="font-size: 10.91px;">冲突</a> <a href="/tags/%E5%88%86%E6%94%AF/" style="font-size: 10px;">分支</a> <a href="/tags/%E5%88%9B%E5%BB%BA/" style="font-size: 10px;">创建</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">创建数据库</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 14.55px;">区块链</a> <a href="/tags/%E5%8D%87%E7%BA%A7/" style="font-size: 10px;">升级</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 10px;">参数</a> <a href="/tags/%E5%A7%94%E6%89%98/" style="font-size: 10px;">委托</a> <a href="/tags/%E5%AD%98%E5%82%A8/" style="font-size: 10px;">存储</a> <a href="/tags/%E5%AD%98%E5%9C%A8/" style="font-size: 10px;">存在</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">学习笔记</a> <a href="/tags/%E5%AE%9E%E4%BE%8B/" style="font-size: 10px;">实例</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 10px;">容器</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/" style="font-size: 10.91px;">工作流</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E5%B8%AD%E6%85%95%E8%93%89/" style="font-size: 10px;">席慕蓉</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">异步编程</a> <a href="/tags/%E5%BE%AE%E4%BF%A1/" style="font-size: 10px;">微信</a> <a href="/tags/%E6%8F%92%E5%85%A5/" style="font-size: 10px;">插入</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" style="font-size: 10px;">数据存储</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/" style="font-size: 10px;">数据集合</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%96%87%E6%A1%A3/" style="font-size: 11.82px;">文档</a> <a href="/tags/%E6%96%87%E6%A1%A3%E6%B5%81/" style="font-size: 10px;">文档流</a> <a href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" style="font-size: 10px;">智能合约</a> <a href="/tags/%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">标签</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95/" style="font-size: 10px;">模板语法</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 10.91px;">比特币</a> <a href="/tags/%E6%B3%A2%E6%B5%AA%E5%AD%97%E7%AC%A6/" style="font-size: 10.91px;">波浪字符</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10.91px;">注解</a> <a href="/tags/%E7%94%A8%E6%B3%95/" style="font-size: 14.55px;">用法</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/" style="font-size: 10px;">端口占用</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10.91px;">笔记</a> <a href="/tags/%E7%AC%A6%E5%8F%B7/" style="font-size: 10px;">符号</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">组件基础</a> <a href="/tags/%E7%BB%91%E5%AE%9A/" style="font-size: 10px;">绑定</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">职责链模式</a> <a href="/tags/%E8%81%9A%E5%90%88/" style="font-size: 10.91px;">聚合</a> <a href="/tags/%E8%81%9A%E9%9B%86%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">聚集索引</a> <a href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/" style="font-size: 10px;">自定义指令</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">计算属性</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10.91px;">设计模式</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10.91px;">进程</a> <a href="/tags/%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80/" style="font-size: 10px;">远程仓库地址</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%93%8D%E4%BD%9C%E7%AC%A6/" style="font-size: 10px;">逻辑操作符</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 10px;">部署</a> <a href="/tags/%E9%9A%BE%E5%BA%A6/" style="font-size: 10px;">难度</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 10px;">集合</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/16/python/python-package-module/">Python 的 module 和 package</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/05/mysql/mysql-ddl-note/">MySQL 的 DDL 的一些整理</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/16/java/mybatis-mapper-locations/">MyBatis 的 mapper-locations 引发的</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/07/soa/microservice-article-note/">马丁富勒微服务论文学习</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/java/java-maven-pom-note/">pom 文件学习（未完待续）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

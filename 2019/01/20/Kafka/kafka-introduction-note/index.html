@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Kafka的学习笔记--介绍（总体概念） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="前言最近项目要用到 Kafka，要研究一下这个，先得总体对它有个了解，而个人经验，想要获得总体了解，最好的办法就是阅读维基百科，或者阅读官网的介绍，这次我来阅读官网的介绍。 我觉得，反复研读，充分理解这个介绍，可以提纲挈领，之后再配合对各个模块具体的研究，可以很快理解和掌握。 下面摘抄了正文，配合上总结的一定的段落大意，便于快速抓住要旨。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka的学习笔记--介绍（总体概念）">
+<meta property="og:url" content="http://example.com/2019/01/20/Kafka/kafka-introduction-note/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言最近项目要用到 Kafka，要研究一下这个，先得总体对它有个了解，而个人经验，想要获得总体了解，最好的办法就是阅读维基百科，或者阅读官网的介绍，这次我来阅读官网的介绍。 我觉得，反复研读，充分理解这个介绍，可以提纲挈领，之后再配合对各个模块具体的研究，可以很快理解和掌握。 下面摘抄了正文，配合上总结的一定的段落大意，便于快速抓住要旨。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190116175218757.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYWl5dTIwMDI=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190116175242226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYWl5dTIwMDI=,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190116180038622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYWl5dTIwMDI=,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-01-20T11:54:00.000Z">
+<meta property="article:modified_time" content="2023-06-07T11:57:01.831Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Kafka">
+<meta property="article:tag" content="介绍">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20190116175218757.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYWl5dTIwMDI=,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-Kafka/kafka-introduction-note" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2019/01/20/Kafka/kafka-introduction-note/" class="article-date">
+  <time class="dt-published" datetime="2019-01-20T11:54:00.000Z" itemprop="datePublished">2019-01-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Kafka/">Kafka</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Kafka的学习笔记--介绍（总体概念）
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近项目要用到 Kafka，要研究一下这个，先得总体对它有个了解，而个人经验，想要获得总体了解，最好的办法就是阅读维基百科，或者阅读官网的介绍，这次我来阅读官网的介绍。</p>
+<p>我觉得，反复研读，充分理解这个介绍，可以提纲挈领，之后再配合对各个模块具体的研究，可以很快理解和掌握。</p>
+<p>下面摘抄了正文，配合上总结的一定的段落大意，便于快速抓住要旨。</p>
+<span id="more"></span>
+
+<h1 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h1><p>原帖收藏于<a target="_blank" rel="noopener" href="https://www.oxysun.cn/">IT老兵驿站</a>。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="Apache-Kafka®-is-a-distributed-streaming-platform-What-exactly-does-that-mean"><a href="#Apache-Kafka®-is-a-distributed-streaming-platform-What-exactly-does-that-mean" class="headerlink" title="Apache Kafka® is a distributed streaming platform. What exactly does that mean?"></a>Apache Kafka® is a distributed streaming platform. What exactly does that mean?</h3><p>kafka 是一个分布式的流化平台。怎么理解这个意思呢？</p>
+<blockquote>
+<p>A streaming platform has three key capabilities:</p>
+<ul>
+<li>Publish and subscribe to streams of records, similar to a -message queue or enterprise messaging system.</li>
+<li>Store streams of records in a fault-tolerant durable way.</li>
+<li>Process streams of records as they occur.</li>
+</ul>
+</blockquote>
+<p>一个流化平台需要有三个关键的能力：</p>
+<ul>
+<li>对记录流的发布和订阅，类似一个消息队列或者企业级消息系统。</li>
+<li>采用一种持久容错的方式来存储记录流。</li>
+<li>当记录流产生的时候处理它。</li>
+</ul>
+<blockquote>
+<p>Kafka is generally used for two broad classes of applications:</p>
+<ul>
+<li>Building real-time streaming data pipelines that reliably get data between systems or applications</li>
+<li>Building real-time streaming applications that transform or react to the streams of data</li>
+</ul>
+</blockquote>
+<p>Kafka通常被用于两种广泛的应用类型：</p>
+<ul>
+<li>建立实时流化数据管道，在系统或者应用程序中可靠地获取数据</li>
+<li>建立实时流化应用程序，对流化数据来转换或者响应</li>
+</ul>
+<blockquote>
+<p>To understand how Kafka does these things, let’s dive in and explore Kafka’s capabilities from the bottom up.<br></br><br>First a few concepts:<br></br><br>Kafka is run as a cluster on one or more servers that can span multiple datacenters.<br></br><br>The Kafka cluster stores streams of records in categories called topics.<br></br><br>Each record consists of a key, a value, and a timestamp.</p>
+</blockquote>
+<p>一些新的概念：<br>Kafka 作为一个集群来运行，在一台或者多台服务器上，可以跨越多个数据中心。（后面这句怎么理解？是不是是指每一个服务器上都储存着一份完整的数据）<br>Kafka 集群存储着流化记录在被称为 topics 的分类中。<br>每一个记录包含着一个 key，一个 value，和一个 timestamp。</p>
+<blockquote>
+<p>Kafka has four core APIs:<br></br><br>The Producer API allows an application to publish a stream of records to one or more Kafka topics.<br></br><br>The Consumer API allows an application to subscribe to one or more topics and process the stream of records produced to them.<br></br><br>The Streams API allows an application to act as a stream processor, consuming an input stream from one or more topics and producing an output stream to one or more output topics, effectively transforming the input streams to output streams.<br></br><br>The Connector API allows building and running reusable producers or consumers that connect Kafka topics to existing applications or data systems. For example, a connector to a relational database might capture every change to a table.</p>
+</blockquote>
+<p>4个核心API：</p>
+<p>Producer API 允许一个应用程序去发布一个记录流到一个或多个 Kafka topics 中。<br>Consumer API 允许一个应用程序去订阅一个或多个 topics，并且处理产生给它们（前面的topics）的记录流。<br>Streams API 允许一个应用程序去扮演一个stream processor（流化处理器），从一个或多个topics中消费一个输入流，并且产生一个输出流到一个或多个输出的 topics 中，有效转换输入流到输出流。<br>Connector API 允许建造和运行一个可重用的生产者或者消费者来连接 Kafka topics 到一个existing 的应用程序或者数据系统。例如，一个连接器到一个关系型数据库可以捕获对一个表的每一次变化。</p>
+<blockquote>
+<p>In Kafka the communication between the clients and the servers is done with a simple, high-performance, language agnostic TCP protocol. This protocol is versioned and maintains backwards compatibility with older version. We provide a Java client for Kafka, but clients are available in many languages.</p>
+</blockquote>
+<p>Kafka 协议是用 TCP 协议构建，与语言无关，版本化的，兼容过去老的版本。</p>
+<blockquote>
+<h2 id="Topics-and-Logs"><a href="#Topics-and-Logs" class="headerlink" title="Topics and Logs"></a>Topics and Logs</h2><p>Let’s first dive into the core abstraction Kafka provides for a stream of records—the topic.<br>A topic is a category or feed name to which records are published. Topics in Kafka are always multi-subscriber; that is, a topic can have zero, one, or many consumers that subscribe to the data written to it.</p>
+</blockquote>
+<p>一个 topic 是一个类别或者 feed name（不知道怎么解释，应该是类似 RSS 的概念，一个可以被订阅的东西的名字），用来发布记录的。Topics 通常是多订户的，就是说，一个 topic 可以有零个，一个，或者很多消费者来订阅写在它里面的数据的。</p>
+<blockquote>
+<p>For each topic, the Kafka cluster maintains a partitioned log that looks like this:<br><img src="https://img-blog.csdnimg.cn/20190116175218757.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYWl5dTIwMDI=,size_16,color_FFFFFF,t_70"><br>Each partition is an ordered, immutable sequence of records that is continually appended to—a structured commit log. The records in the partitions are each assigned a sequential id number called the offset that uniquely identifies each record within the partition.</p>
+</blockquote>
+<p>每一个 partition 是一个顺序的，不可变顺序的记录，可以被连续追加的结构化的 commit log（提交日志？）。每条在 partition 中的记录被分配一个 sequential id number， 被称为offset，是在 partition 中的每条记录唯一的标识符。</p>
+<p>这里留有了几个问题，如何划分 partition，如何对 partition 进行读写？consumer 是针对partition来消费的？</p>
+<p>partition 是由 Kafka 来划分的，它来使用 Round-Robin（单循环的方式）来进行写。（奇怪，这句话是哪里找来的，不是原文中所提到的，这个地方是可以，而不是一定采用 Round-Robin，还可以设置一个key，这样去做分配）</p>
+<blockquote>
+<p>The Kafka cluster durably persists all published records—whether or not they have been consumed—using a configurable retention period. For example, if the retention policy is set to two days, then for the two days after a record is published, it is available for consumption, after which it will be discarded to free up space. Kafka’s performance is effectively constant with respect to data size so storing data for a long time is not a problem.<br><img src="https://img-blog.csdnimg.cn/20190116175242226.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYWl5dTIwMDI=,size_16,color_FFFFFF,t_70"  width="75%"></p>
+</blockquote>
+<p>无论记录是否被消费，Kafka 集群都会一个可配置的保持周期留存所有发布的记录。</p>
+<blockquote>
+<p>In fact, the only metadata retained on a per-consumer basis is the offset or position of that consumer in the log. This offset is controlled by the consumer: normally a consumer will advance its offset linearly as it reads records, but, in fact, since the position is controlled by the consumer it can consume records in any order it likes. For example a consumer can reset to an older offset to reprocess data from the past or skip ahead to the most recent record and start consuming from “now”.</p>
+</blockquote>
+<p>这段比较关键，事实上，唯一保留在每一个消费者端的元数据就是这个 offset，偏移量，这个偏移量是用户端的，即每个用户读到哪里了。</p>
+<blockquote>
+<p>This combination of features means that Kafka consumers are very cheap—they can come and go without much impact on the cluster or on other consumers. For example, you can use our command line tools to “tail” the contents of any topic without changing what is consumed by any existing consumers.</p>
+</blockquote>
+<p>consumer 是非常便宜的–这里的意思是 consumer 可以很容易的加入或者离开，并没有对其他consumer 产生太多的影响。</p>
+<blockquote>
+<p>The partitions in the log serve several purposes. First, they allow the log to scale beyond a size that will fit on a single server. Each individual partition must fit on the servers that host it, but a topic may have many partitions so it can handle an arbitrary amount of data. Second they act as the unit of parallelism—more on that in a bit.</p>
+</blockquote>
+<p>partitons 有很多用途。可以使日志分布在多台服务器上，这样一个 topic 可以处理更多的数据–这里的意思是一个 topic 可以通过 partition 放在多台 server 上，从而实现 topic 数据的横向扩展？<br>那每个 partition 又被 ZooKeeper 进行备份，那这里是一个多对多的关系了。<br>其次，它们扮演者并行单位的角色–在某种程度上，更多要依靠这一点。</p>
+<blockquote>
+<h2 id="Distribution"><a href="#Distribution" class="headerlink" title="Distribution"></a>Distribution</h2><p>The partitions of the log are distributed over the servers in the Kafka cluster with each server handling data and requests for a share of the partitions. Each partition is replicated across a configurable number of servers for fault tolerance.<br></br><br>Each partition has one server which acts as the “leader” and zero or more servers which act as “followers”. The leader handles all read and write requests for the partition while the followers passively replicate the leader. If the leader fails, one of the followers will automatically become the new leader. Each server acts as a leader for some of its partitions and a follower for others so load is well balanced within the cluster.</p>
+</blockquote>
+<p>这段讲了 sever 和 partition 的关系，这里说 partitions of the log，（日志的partition，这是说Kafka其实是基于日志的？是的，commit log）每一个 server 处理着数据和请求。每一个partition 会在一个可配置数目的 server 中间被复制。（那么一个 partition 会被分在多个server上吗？不会，每个partition在每个server上是完整的）server在交替扮演者 leader（领导者）和follower（跟随者）的角色。leader 为 partition 处理所有读写请求，followers 被动地复制leader。</p>
+<p>这里存在了几个问题：</p>
+<ol>
+<li>这里的 server 和 cluster 是不是指的是一回事？应该是一个 cluster 包含多个 server。</li>
+<li>这里 partition 的一致性维护其实是由 ZooKeeper 提供的吗？ISR 的持久性是通过 ZooKeeper维护的，但是算法又没有使用 ZAB 算法。</li>
+</ol>
+<blockquote>
+<h2 id="Geo-Replication"><a href="#Geo-Replication" class="headerlink" title="Geo-Replication"></a>Geo-Replication</h2><p>Kafka MirrorMaker provides geo-replication support for your clusters. With MirrorMaker, messages are replicated across multiple datacenters or cloud regions. You can use this in active&#x2F;passive scenarios for backup and recovery; or in active&#x2F;active scenarios to place data closer to your users, or support data locality requirements.<br></br></p>
+<h2 id="Producers"><a href="#Producers" class="headerlink" title="Producers"></a>Producers</h2><p>Producers publish data to the topics of their choice. The producer is responsible for choosing which record to assign to which partition within the topic. This can be done in a round-robin fashion simply to balance load or it can be done according to some semantic partition function (say based on some key in the record). More on the use of partitioning in a second!</p>
+</blockquote>
+<p>Producers 负责在 topic 中选择哪一条记录分配给哪一个 partition。这可以采用 round-robin（循环）方式或者其它方式。</p>
+<blockquote>
+<p>Consumers<br>Consumers label themselves with a consumer group name, and each record published to a topic is delivered to one consumer instance within each subscribing consumer group. Consumer instances can be in separate processes or on separate machines.</p>
+</blockquote>
+<p>Consumers 用一个 consumer group 的名字来表示自己，每一条发布到一个 topic 的记录被传递到（不是拖的方式吗？这里这么说感觉像是推的方式了，可能方式本身并不重要，也可能是两种方式混合在一起，为了达到目的）每一个订阅的 consumer group 的一个 consumer 实例。Consumer instances可以在单独的进程或者单独的机器上。</p>
+<p>这里 consumer instance 和 consumer group 都分别指代什么呢？一个 group 中会有多个instance。consumer group 对应着 partition。</p>
+<blockquote>
+<p>If all the consumer instances have the same consumer group, then the records will effectively be load balanced over the consumer instances.<br></br><br>If all the consumer instances have different consumer groups, then each record will be broadcast to all the consumer processes.<br><img src="https://img-blog.csdnimg.cn/20190116180038622.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2NoYWl5dTIwMDI=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</blockquote>
+<p>上面两句有些含糊，consumer instance 和 consumer group 的关系，和 consumer processes的关系。</p>
+<blockquote>
+<p>A two server Kafka cluster hosting four partitions (P0-P3) with two consumer groups. Consumer group A has two consumer instances and group B has four.<br></br><br>More commonly, however, we have found that topics have a small number of consumer groups, one for each “logical subscriber”. Each group is composed of many consumer instances for scalability and fault tolerance. This is nothing more than publish-subscribe semantics where the subscriber is a cluster of consumers instead of a single process.</p>
+</blockquote>
+<p>然而，更为通用的是，我们已经发现 topics 有很小数目的 consumer groups，每一个是“logical subscriber”，逻辑上的订阅者。每一个组由很多 consumer instances 组成，为了可扩展性和容错。除了订阅者是一个 consumer 的 cluster 代替了一个单独的进程之外，这和 publish-subscribe 语法没有任何区别。</p>
+<blockquote>
+<p>The way consumption is implemented in Kafka is by dividing up the partitions in the log over the consumer instances so that each instance is the exclusive consumer of a “fair share” of partitions at any point in time. This process of maintaining membership in the group is handled by the Kafka protocol dynamically. If new instances join the group they will take over some partitions from other members of the group; if an instance dies, its partitions will be distributed to the remaining instances.</p>
+</blockquote>
+<p>Kafka 所实现的消费，是把 log 中的 partition 分散到 consumer instance 上去，以便每一个instance 在任何一个时间点上都是一个排他的，对于 partition 的“fair share”（公平共享）的consumer。维持这个 group 内关系的过程是由Kafka协议动态控制。如果一些新的 instance 加入了 group，它们就会从 group 其它成员那里接管一些 partitions；如果一个 instance 挂掉，它的 partitions 就会分配给剩余的 instance（这里的这个概念，应该就是 rebalance）。</p>
+<p>（这说明一个实例对应着一个 partition。）</p>
+<p>参考<a target="_blank" rel="noopener" href="https://dzone.com/articles/dont-use-apache-kafka-consumer-groups-the-wrong-wa">这里</a>：</p>
+<blockquote>
+<p>Having consumers as part of the same consumer group means providing the “competing consumers” pattern with whom the messages from topic partitions are spread across the members of the group. Each consumer receives messages from one or more partitions (“automatically” assigned to it) and the same messages won’t be received by the other consumers (assigned to different partitions). In this way, we can scale the number of the consumers up to the number of the partitions (having one consumer reading only one partition); in this case, a new consumer joining the group will be in an idle state without being assigned to any partition.<br></br><br>Having consumers as part of different consumer groups means providing the “publish&#x2F;subscribe” pattern where the messages from topic partitions are sent to all the consumers across the different groups. It means that inside the same consumer group, we’ll have the rules explained above, but across different groups, the consumers will receive the same messages. It’s useful when the messages inside a topic are of interest for different applications that will process them in different ways. We want all the interested applications to receive all the same messages from the topic.</p>
+</blockquote>
+<p>一个 group 内的 consumer 互相是竞争的，一个消息被一个 consumer 消费了，group 内的别的 consumer 就不会再收到这个消息了。而 consumer 在不同的 group 中，则每个 group 都会收到这个消息，但是在一个 group 内，还是同样的原则。这样说来，group 对应着 topic。</p>
+<blockquote>
+<p>Kafka only provides a total order over records within a partition, not between different partitions in a topic. Per-partition ordering combined with the ability to partition data by key is sufficient for most applications. However, if you require a total order over records this can be achieved with a topic that has only one partition, though this will mean only one consumer process per consumer group.</p>
+</blockquote>
+<p>Kafka 仅在 partition 中对记录提供总的顺序，而不是在一个 topic 下不同的 partition 之间。对于大多数应用程序而言，按分区排序与按键分区数据的能力相结合就足够了。然后，如果你需要对记录进行总排序，那只能是一个 topic 只有一个 partition，这意味着一个 consumer group只有一个 consumer 进程。</p>
+<blockquote>
+<h2 id="Multi-tenancy"><a href="#Multi-tenancy" class="headerlink" title="Multi-tenancy"></a>Multi-tenancy</h2><p>You can deploy Kafka as a multi-tenant solution. Multi-tenancy is enabled by configuring which topics can produce or consume data. There is also operations support for quotas. Administrators can define and enforce quotas on requests to control the broker resources that are used by clients. For more information, see the security documentation.</p>
+</blockquote>
+<p>多租期，这段还有待理解。</p>
+<blockquote>
+<h2 id="Guarantees"><a href="#Guarantees" class="headerlink" title="Guarantees"></a>Guarantees</h2><p>At a high-level Kafka gives the following guarantees:<br></br><br>Messages sent by a producer to a particular topic partition will be appended in the order they are sent. That is, if a record M1 is sent by the same producer as a record M2, and M1 is sent first, then M1 will have a lower offset than M2 and appear earlier in the log.<br></br><br>A consumer instance sees records in the order they are stored in the log.<br></br><br>For a topic with replication factor N, we will tolerate up to N-1 server failures without losing any records committed to the log.<br>More details on these guarantees are given in the design section of the documentation.</p>
+</blockquote>
+<p>保证，消息是具有先后性的，最小服务数量，这是说容灾能力，如果复制因子是 N，那么至多可以瘫痪 N - 1 台server。</p>
+<blockquote>
+<h2 id="Kafka-as-a-Messaging-System"><a href="#Kafka-as-a-Messaging-System" class="headerlink" title="Kafka as a Messaging System"></a>Kafka as a Messaging System</h2><p>How does Kafka’s notion of streams compare to a traditional enterprise messaging system?<br></br><br>Messaging traditionally has two models: queuing and publish-subscribe. In a queue, a pool of consumers may read from a server and each record goes to one of them; in publish-subscribe the record is broadcast to all consumers. Each of these two models has a strength and a weakness. The strength of queuing is that it allows you to divide up the processing of data over multiple consumer instances, which lets you scale your processing. Unfortunately, queues aren’t multi-subscriber—once one process reads the data it’s gone. Publish-subscribe allows you broadcast data to multiple processes, but has no way of scaling processing since every message goes to every subscriber.</p>
+</blockquote>
+<p>传统的消息系统有两种模型：队列和发布者-订阅者，前者消息是一对一的，后者消息是一对多的，二者互有优劣。</p>
+<blockquote>
+<p>The consumer group concept in Kafka generalizes these two concepts. As with a queue the consumer group allows you to divide up processing over a collection of processes (the members of the consumer group). As with publish-subscribe, Kafka allows you to broadcast messages to multiple consumer groups.<br></br><br>The advantage of Kafka’s model is that every topic has both these properties—it can scale processing and is also multi-subscriber—there is no need to choose one or the other.<br>Kafka has stronger ordering guarantees than a traditional messaging system, too.<br></br><br>A traditional queue retains records in-order on the server, and if multiple consumers consume from the queue then the server hands out records in the order they are stored. However, although the server hands out records in order, the records are delivered asynchronously to consumers, so they may arrive out of order on different consumers. This effectively means the ordering of the records is lost in the presence of parallel consumption. Messaging systems often work around this by having a notion of “exclusive consumer” that allows only one process to consume from a queue, but of course this means that there is no parallelism in processing.<br></br><br>Kafka does it better. By having a notion of parallelism—the partition—within the topics, Kafka is able to provide both ordering guarantees and load balancing over a pool of consumer processes. This is achieved by assigning the partitions in the topic to the consumers in the consumer group so that each partition is consumed by exactly one consumer in the group. By doing this we ensure that the consumer is the only reader of that partition and consumes the data in order. Since there are many partitions this still balances the load over many consumer instances. Note however that there cannot be more consumer instances in a consumer group than partitions.</p>
+</blockquote>
+<p>Kafka 采取了两家之长，一个消息可以支持多订户，使用了 partition，增加了并发。</p>
+<blockquote>
+<h2 id="Kafka-as-a-Storage-System"><a href="#Kafka-as-a-Storage-System" class="headerlink" title="Kafka as a Storage System"></a>Kafka as a Storage System</h2><p>Any message queue that allows publishing messages decoupled from consuming them is effectively acting as a storage system for the in-flight messages. What is different about Kafka is that it is a very good storage system.<br></br><br>Data written to Kafka is written to disk and replicated for fault-tolerance. Kafka allows producers to wait on acknowledgement so that a write isn’t considered complete until it is fully replicated and guaranteed to persist even if the server written to fails.</p>
+</blockquote>
+<p>这段比较重要，Kafka 允许生产者等待确认，以便在完全复制之前写入不被认为是完整的，并且即使写入的服务器失败也保证持久性–这可能是通过复制到了别的服务器上来实现的。</p>
+<blockquote>
+<p>The disk structures Kafka uses scale well—Kafka will perform the same whether you have 50 KB or 50 TB of persistent data on the server.<br></br><br>As a result of taking storage seriously and allowing the clients to control their read position, you can think of Kafka as a kind of special purpose distributed filesystem dedicated to high-performance, low-latency commit log storage, replication, and propagation.<br></br><br>For details about the Kafka’s commit log storage and replication design, please read this page.</p>
+</blockquote>
+<blockquote>
+<h2 id="Kafka-for-Stream-Processing"><a href="#Kafka-for-Stream-Processing" class="headerlink" title="Kafka for Stream Processing"></a>Kafka for Stream Processing</h2><p>It isn’t enough to just read, write, and store streams of data, the purpose is to enable real-time processing of streams.<br></br><br>In Kafka a stream processor is anything that takes continual streams of data from input topics, performs some processing on this input, and produces continual streams of data to output topics.<br></br><br>For example, a retail application might take in input streams of sales and shipments, and output a stream of reorders and price adjustments computed off this data.<br></br><br>It is possible to do simple processing directly using the producer and consumer APIs. However for more complex transformations Kafka provides a fully integrated Streams API. This allows building applications that do non-trivial processing that compute aggregations off of streams or join streams together.<br></br><br>This facility helps solve the hard problems this type of application faces: handling out-of-order data, reprocessing input as code changes, performing stateful computations, etc.<br></br><br>The streams API builds on the core primitives Kafka provides: it uses the producer and consumer APIs for input, uses Kafka for stateful storage, and uses the same group mechanism for fault tolerance among the stream processor instances.<br></br></p>
+</blockquote>
+<p>流化处理，把输入流进行处理，转成想要的输出流，这块需要实践一下，才好理解。</p>
+<blockquote>
+<h2 id="Putting-the-Pieces-Together"><a href="#Putting-the-Pieces-Together" class="headerlink" title="Putting the Pieces Together"></a>Putting the Pieces Together</h2><p>This combination of messaging, storage, and stream processing may seem unusual but it is essential to Kafka’s role as a streaming platform.<br></br><br>A distributed file system like HDFS allows storing static files for batch processing. Effectively a system like this allows storing and processing historical data from the past.<br></br><br>A traditional enterprise messaging system allows processing future messages that will arrive after you subscribe. Applications built in this way process future data as it arrives.<br></br><br>Kafka combines both of these capabilities, and the combination is critical both for Kafka usage as a platform for streaming applications as well as for streaming data pipelines.<br></br><br>By combining storage and low-latency subscriptions, streaming applications can treat both past and future data the same way. That is a single application can process historical, stored data but rather than ending when it reaches the last record it can keep processing as future data arrives. This is a generalized notion of stream processing that subsumes batch processing as well as message-driven applications.<br></br><br>Likewise for streaming data pipelines the combination of subscription to real-time events make it possible to use Kafka for very low-latency pipelines; but the ability to store data reliably make it possible to use it for critical data where the delivery of data must be guaranteed or for integration with offline systems that load data only periodically or may go down for extended periods of time for maintenance. The stream processing facilities make it possible to transform data as it arrives.<br></br><br>For more information on the guarantees, APIs, and capabilities Kafka provides see the rest of the documentation.</p>
+</blockquote>
+<p>总结一下，夸一夸Kafka，就不赘述了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>通过阅读这一篇文档，对Kafka有了一个总体的印象。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="http://kafka.apache.org/intro">http://kafka.apache.org/intro</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2019/01/20/Kafka/kafka-introduction-note/" data-id="cliph6pc0002y2cx88d6hbx4q" data-title="Kafka的学习笔记--介绍（总体概念）" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/22/java/java-pojo-bean-note/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Java的POJO和Beans
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/06/mongodb/mongodb-java-driver/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java访问MongoDB：安装驱动</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/">Blockchain</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/%E4%BB%A5%E5%A4%AA%E5%9D%8A/">以太坊</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Blockchain/%E4%BB%A5%E5%A4%AA%E5%9D%8A/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/">智能合约</a></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/CSS/">CSS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Design-Pattern/">Design Pattern</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/ES/">ES</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/English/">English</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/NPM/">NPM</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/Vue/">Vue</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kafka/">Kafka</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Shell/">Shell</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/Ubuntu/">Ubuntu</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/MongoDB/">MongoDB</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/MySQL/">MySQL</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/SOA/">SOA</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1/">微信</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%AE%B0/">杂记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/">程序人生</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E5%88%92/">计划</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Autowired/" rel="tag">Autowired</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/B-%E6%A0%91/" rel="tag">B 树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/B-%E6%A0%91/" rel="tag">B+ 树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Base48/" rel="tag">Base48</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Beans/" rel="tag">Beans</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/" rel="tag">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDL/" rel="tag">DDL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DETACHED-HEAD/" rel="tag">DETACHED HEAD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DTO/" rel="tag">DTO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/English/" rel="tag">English</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/" rel="tag">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git-Flow/" rel="tag">Git Flow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JS/" rel="tag">JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Javascript/" rel="tag">Javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KVC/" rel="tag">KVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/" rel="tag">Kafka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Maven/" rel="tag">Maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/" rel="tag">MongoDB</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NAT/" rel="tag">NAT</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NPM/" rel="tag">NPM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OC/" rel="tag">OC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/POJO/" rel="tag">POJO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ReactiveCocoa/" rel="tag">ReactiveCocoa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ReactiveObjC/" rel="tag">ReactiveObjC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Repository-not-found/" rel="tag">Repository not found</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RequestBody/" rel="tag">RequestBody</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ResponseBody/" rel="tag">ResponseBody</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RestControlle/" rel="tag">RestControlle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SASS/" rel="tag">SASS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shiro/" rel="tag">Shiro</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/" rel="tag">SpringMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SprintMVC/" rel="tag">SprintMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Style/" rel="tag">Style</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ubuntu16-04/" rel="tag">Ubuntu16.04</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VO/" rel="tag">VO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/" rel="tag">Vue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/" rel="tag">Workflow</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/X-Frame-Options/" rel="tag">X-Frame-Options</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/M/" rel="tag">^M</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/aggregate/" rel="tag">aggregate</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/alter/" rel="tag">alter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/annotation/" rel="tag">annotation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/args/" rel="tag">args</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/buffer/" rel="tag">buffer</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cache/" rel="tag">cache</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/change/" rel="tag">change</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/checkout/" rel="tag">checkout</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cmake/" rel="tag">cmake</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collection/" rel="tag">collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/component/" rel="tag">component</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computed/" rel="tag">computed</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/create/" rel="tag">create</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/database/" rel="tag">database</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/df/" rel="tag">df</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/diff/" rel="tag">diff</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/double-ampersand/" rel="tag">double ampersand</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/double-vertical-bar/" rel="tag">double vertical bar</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/driver/" rel="tag">driver</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/du/" rel="tag">du</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fast-forward/" rel="tag">fast forward</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ff/" rel="tag">ff</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/font/" rel="tag">font</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/font-size/" rel="tag">font-size</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/free/" rel="tag">free</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-branch/" rel="tag">git branch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-index/" rel="tag">git index</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-merge/" rel="tag">git merge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-pull/" rel="tag">git pull</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-reflog/" rel="tag">git reflog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-reset/" rel="tag">git reset</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-rev-parse/" rel="tag">git rev-parse</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-revert/" rel="tag">git revert</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git-tag/" rel="tag">git tag</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i-e/" rel="tag">i.e.</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/" rel="tag">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/inode/" rel="tag">inode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jps/" rel="tag">jps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kwargs/" rel="tag">kwargs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/" rel="tag">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/" rel="tag">mac</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/make/" rel="tag">make</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mapper-locations/" rel="tag">mapper-locations</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/maven/" rel="tag">maven</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/microservice/" rel="tag">microservice</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/modify/" rel="tag">modify</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/module/" rel="tag">module</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nexus/" rel="tag">nexus</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/no-ff/" rel="tag">no-ff</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/package/" rel="tag">package</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pom/" rel="tag">pom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rewrite/" rel="tag">rewrite</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rm/" rel="tag">rm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/schema/" rel="tag">schema</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/semicolon/" rel="tag">semicolon</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/" rel="tag">shell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/soa/" rel="tag">soa</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/synchronized/" rel="tag">synchronized</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/this/" rel="tag">this</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/" rel="tag">tomcat</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/top/" rel="tag">top</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/true-merge/" rel="tag">true merge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/url/" rel="tag">url</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/windows/" rel="tag">windows</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%80%E6%A3%B5%E5%BC%80%E8%8A%B1%E7%9A%84%E6%A0%91/" rel="tag">一棵开花的树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%BB%E9%A2%98/" rel="tag">主题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" rel="tag">二叉树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%8B%E7%BB%8D/" rel="tag">介绍</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A3%E7%90%86/" rel="tag">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag">以太坊</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BE%9D%E8%B5%96%E5%8C%85/" rel="tag">依赖包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BF%AE%E6%94%B9/" rel="tag">修改</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%80%BC%E4%BC%A0%E9%80%92/" rel="tag">值传递</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%B2%E7%AA%81/" rel="tag">冲突</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E6%94%AF/" rel="tag">分支</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%9B%E5%BB%BA/" rel="tag">创建</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">创建数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%87%E7%BA%A7/" rel="tag">升级</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%82%E6%95%B0/" rel="tag">参数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A7%94%E6%89%98/" rel="tag">委托</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%82%A8/" rel="tag">存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%98%E5%9C%A8/" rel="tag">存在</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BE%8B/" rel="tag">实例</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%B9%E5%99%A8/" rel="tag">容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/" rel="tag">工作流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag">工具</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B8%AD%E6%85%95%E8%93%89/" rel="tag">席慕蓉</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" rel="tag">异步编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BE%AE%E4%BF%A1/" rel="tag">微信</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E5%85%A5/" rel="tag">插入</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" rel="tag">数据存储</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/" rel="tag">数据集合</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E6%A1%A3/" rel="tag">文档</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%96%87%E6%A1%A3%E6%B5%81/" rel="tag">文档流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" rel="tag">智能合约</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A0%87%E7%AD%BE/" rel="tag">标签</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95/" rel="tag">模板语法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag">比特币</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A2%E6%B5%AA%E5%AD%97%E7%AC%A6/" rel="tag">波浪字符</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B3%A8%E8%A7%A3/" rel="tag">注解</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%A8%E6%B3%95/" rel="tag">用法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/" rel="tag">端口占用</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%94%E8%AE%B0/" rel="tag">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AC%A6%E5%8F%B7/" rel="tag">符号</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" rel="tag">红黑树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/" rel="tag">组件基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%91%E5%AE%9A/" rel="tag">绑定</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E7%A8%8B/" rel="tag">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F/" rel="tag">职责链模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E5%90%88/" rel="tag">聚合</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%81%9A%E9%9B%86%E7%B4%A2%E5%BC%95/" rel="tag">聚集索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/" rel="tag">自定义指令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7/" rel="tag">计算属性</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag">进程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80/" rel="tag">远程仓库地址</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%80%BB%E8%BE%91%E6%93%8D%E4%BD%9C%E7%AC%A6/" rel="tag">逻辑操作符</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%83%A8%E7%BD%B2/" rel="tag">部署</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%BE%E5%BA%A6/" rel="tag">难度</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%86%E5%90%88/" rel="tag">集合</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Autowired/" style="font-size: 10px;">Autowired</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B 树</a> <a href="/tags/B-%E6%A0%91/" style="font-size: 10px;">B+ 树</a> <a href="/tags/Base48/" style="font-size: 10px;">Base48</a> <a href="/tags/Beans/" style="font-size: 10px;">Beans</a> <a href="/tags/CSS/" style="font-size: 12.73px;">CSS</a> <a href="/tags/DDL/" style="font-size: 10px;">DDL</a> <a href="/tags/DETACHED-HEAD/" style="font-size: 10px;">DETACHED HEAD</a> <a href="/tags/DTO/" style="font-size: 10px;">DTO</a> <a href="/tags/ES/" style="font-size: 10px;">ES</a> <a href="/tags/English/" style="font-size: 10px;">English</a> <a href="/tags/Git/" style="font-size: 20px;">Git</a> <a href="/tags/Git-Flow/" style="font-size: 10px;">Git Flow</a> <a href="/tags/JS/" style="font-size: 16.36px;">JS</a> <a href="/tags/Java/" style="font-size: 19.09px;">Java</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a> <a href="/tags/KVC/" style="font-size: 10.91px;">KVC</a> <a href="/tags/Kafka/" style="font-size: 10.91px;">Kafka</a> <a href="/tags/Linux/" style="font-size: 18.18px;">Linux</a> <a href="/tags/Maven/" style="font-size: 10px;">Maven</a> <a href="/tags/MongoDB/" style="font-size: 17.27px;">MongoDB</a> <a href="/tags/MySQL/" style="font-size: 11.82px;">MySQL</a> <a href="/tags/NAT/" style="font-size: 10px;">NAT</a> <a href="/tags/NPM/" style="font-size: 10px;">NPM</a> <a href="/tags/OC/" style="font-size: 10.91px;">OC</a> <a href="/tags/POJO/" style="font-size: 10.91px;">POJO</a> <a href="/tags/Python/" style="font-size: 13.64px;">Python</a> <a href="/tags/ReactiveCocoa/" style="font-size: 10.91px;">ReactiveCocoa</a> <a href="/tags/ReactiveObjC/" style="font-size: 10.91px;">ReactiveObjC</a> <a href="/tags/Repository-not-found/" style="font-size: 10px;">Repository not found</a> <a href="/tags/RequestBody/" style="font-size: 10px;">RequestBody</a> <a href="/tags/ResponseBody/" style="font-size: 10px;">ResponseBody</a> <a href="/tags/RestControlle/" style="font-size: 10px;">RestControlle</a> <a href="/tags/SASS/" style="font-size: 10px;">SASS</a> <a href="/tags/Shiro/" style="font-size: 10.91px;">Shiro</a> <a href="/tags/Spring/" style="font-size: 10px;">Spring</a> <a href="/tags/SpringMVC/" style="font-size: 10px;">SpringMVC</a> <a href="/tags/SprintMVC/" style="font-size: 10px;">SprintMVC</a> <a href="/tags/Style/" style="font-size: 10px;">Style</a> <a href="/tags/Ubuntu16-04/" style="font-size: 10px;">Ubuntu16.04</a> <a href="/tags/VO/" style="font-size: 10px;">VO</a> <a href="/tags/Vue/" style="font-size: 15.45px;">Vue</a> <a href="/tags/Workflow/" style="font-size: 10px;">Workflow</a> <a href="/tags/X-Frame-Options/" style="font-size: 10px;">X-Frame-Options</a> <a href="/tags/M/" style="font-size: 10px;">^M</a> <a href="/tags/aggregate/" style="font-size: 10.91px;">aggregate</a> <a href="/tags/alter/" style="font-size: 10px;">alter</a> <a href="/tags/annotation/" style="font-size: 10px;">annotation</a> <a href="/tags/args/" style="font-size: 10px;">args</a> <a href="/tags/buffer/" style="font-size: 10px;">buffer</a> <a href="/tags/cache/" style="font-size: 10px;">cache</a> <a href="/tags/change/" style="font-size: 10px;">change</a> <a href="/tags/checkout/" style="font-size: 10.91px;">checkout</a> <a href="/tags/cmake/" style="font-size: 10px;">cmake</a> <a href="/tags/collection/" style="font-size: 10px;">collection</a> <a href="/tags/component/" style="font-size: 10px;">component</a> <a href="/tags/computed/" style="font-size: 10px;">computed</a> <a href="/tags/create/" style="font-size: 10px;">create</a> <a href="/tags/database/" style="font-size: 10px;">database</a> <a href="/tags/df/" style="font-size: 10px;">df</a> <a href="/tags/diff/" style="font-size: 10px;">diff</a> <a href="/tags/double-ampersand/" style="font-size: 10px;">double ampersand</a> <a href="/tags/double-vertical-bar/" style="font-size: 10px;">double vertical bar</a> <a href="/tags/driver/" style="font-size: 10px;">driver</a> <a href="/tags/du/" style="font-size: 10px;">du</a> <a href="/tags/fast-forward/" style="font-size: 10px;">fast forward</a> <a href="/tags/ff/" style="font-size: 10px;">ff</a> <a href="/tags/font/" style="font-size: 10px;">font</a> <a href="/tags/font-size/" style="font-size: 10px;">font-size</a> <a href="/tags/free/" style="font-size: 10px;">free</a> <a href="/tags/git-branch/" style="font-size: 10px;">git branch</a> <a href="/tags/git-index/" style="font-size: 10px;">git index</a> <a href="/tags/git-merge/" style="font-size: 13.64px;">git merge</a> <a href="/tags/git-pull/" style="font-size: 10px;">git pull</a> <a href="/tags/git-reflog/" style="font-size: 10px;">git reflog</a> <a href="/tags/git-reset/" style="font-size: 10px;">git reset</a> <a href="/tags/git-rev-parse/" style="font-size: 10px;">git rev-parse</a> <a href="/tags/git-revert/" style="font-size: 10px;">git revert</a> <a href="/tags/git-tag/" style="font-size: 10px;">git tag</a> <a href="/tags/i-e/" style="font-size: 10px;">i.e.</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/inode/" style="font-size: 10px;">inode</a> <a href="/tags/jps/" style="font-size: 10px;">jps</a> <a href="/tags/kwargs/" style="font-size: 10px;">kwargs</a> <a href="/tags/linux/" style="font-size: 11.82px;">linux</a> <a href="/tags/mac/" style="font-size: 10px;">mac</a> <a href="/tags/make/" style="font-size: 10px;">make</a> <a href="/tags/mapper-locations/" style="font-size: 10px;">mapper-locations</a> <a href="/tags/maven/" style="font-size: 10.91px;">maven</a> <a href="/tags/microservice/" style="font-size: 10px;">microservice</a> <a href="/tags/modify/" style="font-size: 10px;">modify</a> <a href="/tags/module/" style="font-size: 10.91px;">module</a> <a href="/tags/nexus/" style="font-size: 10px;">nexus</a> <a href="/tags/no-ff/" style="font-size: 10px;">no-ff</a> <a href="/tags/package/" style="font-size: 10.91px;">package</a> <a href="/tags/pom/" style="font-size: 10px;">pom</a> <a href="/tags/rewrite/" style="font-size: 10px;">rewrite</a> <a href="/tags/rm/" style="font-size: 10px;">rm</a> <a href="/tags/schema/" style="font-size: 10px;">schema</a> <a href="/tags/semicolon/" style="font-size: 10px;">semicolon</a> <a href="/tags/shell/" style="font-size: 10.91px;">shell</a> <a href="/tags/soa/" style="font-size: 10px;">soa</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/this/" style="font-size: 10px;">this</a> <a href="/tags/tomcat/" style="font-size: 10.91px;">tomcat</a> <a href="/tags/top/" style="font-size: 10px;">top</a> <a href="/tags/true-merge/" style="font-size: 10px;">true merge</a> <a href="/tags/url/" style="font-size: 10px;">url</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/windows/" style="font-size: 10px;">windows</a> <a href="/tags/%E4%B8%80%E6%A3%B5%E5%BC%80%E8%8A%B1%E7%9A%84%E6%A0%91/" style="font-size: 10px;">一棵开花的树</a> <a href="/tags/%E4%B8%BB%E9%A2%98/" style="font-size: 10px;">主题</a> <a href="/tags/%E4%BA%8C%E5%8F%89%E6%A0%91/" style="font-size: 10px;">二叉树</a> <a href="/tags/%E4%BB%8B%E7%BB%8D/" style="font-size: 10.91px;">介绍</a> <a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 10px;">代理</a> <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" style="font-size: 11.82px;">以太坊</a> <a href="/tags/%E4%BE%9D%E8%B5%96%E5%8C%85/" style="font-size: 10.91px;">依赖包</a> <a href="/tags/%E4%BF%AE%E6%94%B9/" style="font-size: 10px;">修改</a> <a href="/tags/%E5%80%BC%E4%BC%A0%E9%80%92/" style="font-size: 10px;">值传递</a> <a href="/tags/%E5%86%B2%E7%AA%81/" style="font-size: 10.91px;">冲突</a> <a href="/tags/%E5%88%86%E6%94%AF/" style="font-size: 10px;">分支</a> <a href="/tags/%E5%88%9B%E5%BB%BA/" style="font-size: 10px;">创建</a> <a href="/tags/%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">创建数据库</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 14.55px;">区块链</a> <a href="/tags/%E5%8D%87%E7%BA%A7/" style="font-size: 10px;">升级</a> <a href="/tags/%E5%8F%82%E6%95%B0/" style="font-size: 10px;">参数</a> <a href="/tags/%E5%A7%94%E6%89%98/" style="font-size: 10px;">委托</a> <a href="/tags/%E5%AD%98%E5%82%A8/" style="font-size: 10px;">存储</a> <a href="/tags/%E5%AD%98%E5%9C%A8/" style="font-size: 10px;">存在</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">学习笔记</a> <a href="/tags/%E5%AE%9E%E4%BE%8B/" style="font-size: 10px;">实例</a> <a href="/tags/%E5%AE%B9%E5%99%A8/" style="font-size: 10px;">容器</a> <a href="/tags/%E5%B7%A5%E4%BD%9C%E6%B5%81/" style="font-size: 10.91px;">工作流</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 10px;">工具</a> <a href="/tags/%E5%B8%AD%E6%85%95%E8%93%89/" style="font-size: 10px;">席慕蓉</a> <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">异步编程</a> <a href="/tags/%E5%BE%AE%E4%BF%A1/" style="font-size: 10px;">微信</a> <a href="/tags/%E6%8F%92%E5%85%A5/" style="font-size: 10px;">插入</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8/" style="font-size: 10px;">数据存储</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 10px;">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%9B%86%E5%90%88/" style="font-size: 10px;">数据集合</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 10px;">数组</a> <a href="/tags/%E6%96%87%E6%A1%A3/" style="font-size: 11.82px;">文档</a> <a href="/tags/%E6%96%87%E6%A1%A3%E6%B5%81/" style="font-size: 10px;">文档流</a> <a href="/tags/%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6/" style="font-size: 10px;">智能合约</a> <a href="/tags/%E6%A0%87%E7%AD%BE/" style="font-size: 10px;">标签</a> <a href="/tags/%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95/" style="font-size: 10px;">模板语法</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 10.91px;">比特币</a> <a href="/tags/%E6%B3%A2%E6%B5%AA%E5%AD%97%E7%AC%A6/" style="font-size: 10.91px;">波浪字符</a> <a href="/tags/%E6%B3%A8%E8%A7%A3/" style="font-size: 10.91px;">注解</a> <a href="/tags/%E7%94%A8%E6%B3%95/" style="font-size: 14.55px;">用法</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AB%AF%E5%8F%A3%E5%8D%A0%E7%94%A8/" style="font-size: 10px;">端口占用</a> <a href="/tags/%E7%AC%94%E8%AE%B0/" style="font-size: 10.91px;">笔记</a> <a href="/tags/%E7%AC%A6%E5%8F%B7/" style="font-size: 10px;">符号</a> <a href="/tags/%E7%BA%A2%E9%BB%91%E6%A0%91/" style="font-size: 10px;">红黑树</a> <a href="/tags/%E7%BB%84%E4%BB%B6%E5%9F%BA%E7%A1%80/" style="font-size: 10px;">组件基础</a> <a href="/tags/%E7%BB%91%E5%AE%9A/" style="font-size: 10px;">绑定</a> <a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 10px;">编程</a> <a href="/tags/%E8%81%8C%E8%B4%A3%E9%93%BE%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">职责链模式</a> <a href="/tags/%E8%81%9A%E5%90%88/" style="font-size: 10.91px;">聚合</a> <a href="/tags/%E8%81%9A%E9%9B%86%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">聚集索引</a> <a href="/tags/%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8C%87%E4%BB%A4/" style="font-size: 10px;">自定义指令</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7/" style="font-size: 10px;">计算属性</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 10.91px;">设计模式</a> <a href="/tags/%E8%BF%9B%E7%A8%8B/" style="font-size: 10.91px;">进程</a> <a href="/tags/%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E5%9C%B0%E5%9D%80/" style="font-size: 10px;">远程仓库地址</a> <a href="/tags/%E9%80%BB%E8%BE%91%E6%93%8D%E4%BD%9C%E7%AC%A6/" style="font-size: 10px;">逻辑操作符</a> <a href="/tags/%E9%83%A8%E7%BD%B2/" style="font-size: 10px;">部署</a> <a href="/tags/%E9%9A%BE%E5%BA%A6/" style="font-size: 10px;">难度</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 10px;">集合</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">May 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/16/python/python-package-module/">Python 的 module 和 package</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/05/mysql/mysql-ddl-note/">MySQL 的 DDL 的一些整理</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/16/java/mybatis-mapper-locations/">MyBatis 的 mapper-locations 引发的</a>
+          </li>
+        
+          <li>
+            <a href="/2020/01/07/soa/microservice-article-note/">马丁富勒微服务论文学习</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/23/java/java-maven-pom-note/">pom 文件学习（未完待续）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
